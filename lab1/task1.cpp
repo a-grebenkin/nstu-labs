@@ -3,33 +3,6 @@
 #include <stdlib.h>
 #include <locale.h>
 
-/* Удаление повторов. 
-words - массив слов. */
-void deleteDuplicate(char **words)
-{
-    int i = 0, j = 0, count = 0;                    // счетчики
-    char *temp = (char *)calloc(255, sizeof(char)); // временная строка
-
-    strcpy(temp, words[0]);  // певый символ исходного массива будет маркером
-    while (words[i] != NULL) // перебор всего массива без первого
-    {
-        if (strcmp(words[i], temp) != 0) // если символ не равен маркеру
-        {
-            while (words[j] != NULL) // перебор от следующего за рассмотр. символом
-            {
-                if (strcmp(words[i], temp) == 0) // если символы совпали
-                {
-                    strcpy(words[j], temp); // маркируем повторяющиеся
-                    count++;                // увеличиваем счётчик
-                }
-                j++;
-            }
-        }
-        i++;
-    }
-    words[i - count] = NULL;
-}
-
 /* Ввод слов */
 char **getWords()
 {
@@ -120,9 +93,8 @@ int main()
     printf("Здравствуйте.\n");
     printf("Данная программа составляет линейный кроссворд из слов, которые введены Вами.\n");
 
-    words = getWords();     // ввод слов
-    deleteDuplicate(words); // удаление повторов
-    handle(words, 0);       // вызов рекурсивной функции
+    words = getWords(); // ввод слов
+    handle(words, 0);   // вызов рекурсивной функции
 
     return 0;
 }
