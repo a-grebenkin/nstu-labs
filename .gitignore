@@ -1,2 +1,10 @@
 .vscode
+
+# linux
 *.out
+
+# windows
+*.obj
+*.pdb
+*.ilk
+*.exe

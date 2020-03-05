@@ -15,44 +15,40 @@ struct List
     }
 };
 
-List *Ins_Sort(int n, List *head)
+List *Add_last(int n, List *head)
 {
     List *q = new List(n), *p = head;
-
+    // если список пуст
     if (head == NULL)
         return q;
-    // включение в начало
-    if (n < head->value)
-    {
-        q->next = head;
-        return q;
-    }
-    // включение в «середину»
+
+    // «идем в конец списка»
     while (p->next != NULL)
-        if (n < p->next->value)
-        {
-            q->next = p->next;
-            p->next = q;
-            break;
-        }
-        else
-            p = p->next;
-    // включаем последним
+        p = p->next;
+
     p->next = q;
+
     return head;
 }
 
 List *Get_Last_Element(List *head)
 {
-    List *element = head;
+    List *element = head,    // текущий элемент в списке
+        *max_element = head; // адрес максимального элемента в списке
 
+    // если список пустой/состоит из 1 элемента
     if (element == NULL || head->next == NULL)
-        return head;
+        return head; // возвращаем его
 
-    while (element->next->next != NULL)
-        element = element->next;
+    do
+    {
+        if (element->value > max_element->value) // если значение текущего элемента > значение максимального элемента
+            max_element = element;               // => текущий элемент максимальный
 
-    return element->next;
+        element = element->next;     // переход
+    } while (element->next != NULL); // пока список не закончится
+
+    return max_element; // возврат максимального элемента
 }
 
 List *Enter_List()
@@ -65,7 +61,7 @@ List *Enter_List()
 
     while (input[0] != '\0')
     {
-        list = Ins_Sort(atoi(input), list);
+        list = Add_last(atoi(input), list);
 
         fgets(input, 25, stdin);
         input[strlen(input) - 1] = '\0';
