@@ -80,30 +80,35 @@ int Count_List(List *list)
 
 int Insert_List(int E, List *l1, List *l2)
 {
-    List *element = l1,
-         *temp = NULL;
+    List *element = l1, // текущий элемент в l1
+        *temp = NULL;   // элемент, идущий после E
 
+    // если первый список пуст
     if (l1 == NULL)
-        return 0;
+        return 0; // значит его длина = 0
 
+    // если второй список пуст
     if (l2 == NULL)
-        return Count_List(l1);
+        return Count_List(l1); // возвращаем длину списка l1
 
+    // поиск элемента, содержащий E
     while (element->value != E && element->next != NULL)
-        element = element->next;
+        element = element->next; // переход
 
-    if (element->value != E && element->next != NULL)
+    // если элемент не найден
+    if (element->value != E && element->next == NULL)
         return Count_List(l1);
 
-    temp = element->next;
-    element->next = l2;
+    temp = element->next; // запоминаем элемент идущий после E
+    element->next = l2;   // добавдяем в l1 l2
 
+    // идем до конца измененного списка
     while (element->next != NULL)
         element = element->next;
 
-    element->next = temp;
+    element->next = temp; // дабавление к измененному списку элемент, идущий после E
 
-    return Count_List(l1);
+    return Count_List(l1); // возврат длины нового списка
 }
 
 int main()
@@ -113,7 +118,7 @@ int main()
 
     printf("Ввод L1:\n");
     l1 = Enter_List();
-    
+
     printf("Ввод L2:\n");
     l2 = Enter_List();
 
