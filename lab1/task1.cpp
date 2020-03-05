@@ -6,26 +6,28 @@
 /* Ввод слов */
 char **getWords()
 {
-    int length = 0;                                // количество слов
-    char **w = (char **)malloc(sizeof(char *));    // массив слов
-    w[length] = (char *)calloc(255, sizeof(char)); // выделение памяти под одно слово
+    int length = 0;                                 // количество слов
+    char **w = (char **)malloc(sizeof(char *));     // массив слов
+    char *temp = (char *)calloc(255, sizeof(char)); // выделение памяти под одно слово
 
     printf("Вам необходимо ввести слова. Каждое слово должно разделяться с помощью Enter.\n");
     printf("По окончанию ввода слов просто нажмите Enter.\n");
 
-    printf("Введите слово: ");               // приглашение пользователя ввести слово
-    fgets(w[length], 255, stdin);            // ввод первого слова
-    w[length][strlen(w[length]) - 1] = '\0'; // удаление '\n' на конце слова
+    printf("Введите слово: ");     // приглашение пользователя ввести слово
+    fgets(temp, 255, stdin);       // ввод первого слова
+    temp[strlen(temp) - 1] = '\0'; // удаление '\n' на конце слова
 
-    while (w[length][0] != '\0') // пока не введена пустая строка
+    while (temp[0] != '\0') // пока не введена пустая строка
     {
-        length++;                                               // увеличение количества слов
-        w = (char **)realloc(w, sizeof(char *) * (length + 1)); // увеличение памяти массива
-        w[length] = (char *)calloc(255, sizeof(char));          // выделение памяти под новое слово
 
-        printf("Введите слово: ");               // приглашение пользователя ввести слово
-        fgets(w[length], 255, stdin);            // ввод нового слова
-        w[length][strlen(w[length]) - 1] = '\0'; // удаление '\n' на конце слова
+        w = (char **)realloc(w, sizeof(char *) * (length + 1)); // увеличение памяти массива
+        w[length] = (char *)calloc(strlen(temp), sizeof(char)); // выделение памяти под новое слово
+        strcpy(w[length], temp);                                // копирование слова в массив
+        length++;                                               // увеличение количества слов
+
+        printf("Введите слово: ");     // приглашение пользователя ввести слово
+        fgets(temp, 255, stdin);       // ввод нового слова
+        temp[strlen(temp) - 1] = '\0'; // удаление '\n' на конце слова
     }
 
     w[length] = NULL; // обозначение конца массива
@@ -54,8 +56,6 @@ int handle(char **words, int position)
     char *temp_word = (char *)calloc(255, sizeof(char)); // временное слово
     int i = position;                                    // индекс в массиве
 
-    int p, c;
-
     if (words[position] == NULL) // если достигли конца массива
     {
         printChainWords(words, position); // вывод цепочки
@@ -70,16 +70,16 @@ int handle(char **words, int position)
                 printf("\n\n-- ВЫВОД КОМБИНАЦИЙ --");
 
             /* меняем слова местами */
-            strcpy(temp_word, words[position]);
-            strcpy(words[position], words[i]);
-            strcpy(words[i], temp_word);
+            temp_word = words[position];
+            words[position] = words[i];
+            words[i] = temp_word;
 
             handle(words, position + 1); // вызов функции для новых перестановок
 
             /* меняем слова местами обратно */
-            strcpy(temp_word, words[position]);
-            strcpy(words[position], words[i]);
-            strcpy(words[i], temp_word);
+            temp_word = words[position];
+            words[position] = words[i];
+            words[i] = temp_word;
         }
         i++;
     }
