@@ -92,7 +92,7 @@ int Insert_List(int E, List *l1, List *l2)
         element = element->next;
         count++;
     }
-    element->next = temp; // дабавление к измененному списку элемент, идущий после E
+    element->next = temp; // добавление к измененному списку элемент, идущий после E
 
     while (element->next != NULL)
     {
