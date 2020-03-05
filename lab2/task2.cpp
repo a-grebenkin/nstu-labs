@@ -48,19 +48,6 @@ List *Enter_List()
     return list;
 }
 
-List *Get_Last_Element(List *head)
-{
-    List *element = head;
-
-    if (element == NULL || head->next == NULL)
-        return head;
-
-    while (element->next->next != NULL)
-        element = element->next;
-
-    return element->next;
-}
-
 int Insert_List(int E, List *l1, List *l2)
 {
     List *element = l1, // текущий элемент в l1
@@ -84,7 +71,7 @@ int Insert_List(int E, List *l1, List *l2)
         return -1;
 
     temp = element->next; // запоминаем элемент идущий после E
-    element->next = l2;   // добавдяем в l1 l2
+    element->next = l2;   // добавляем в l1 l2
 
     // идем до конца измененного списка
     while (element->next != NULL)
@@ -107,6 +94,8 @@ int main()
 {
     List *l1, *l2;
     int E, count;
+
+    setlocale(LC_ALL, "Russian");
 
     printf("Ввод L1:\n");
     l1 = Enter_List();
