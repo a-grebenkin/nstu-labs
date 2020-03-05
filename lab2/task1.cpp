@@ -31,7 +31,7 @@ List *Add_last(int n, List *head)
     return head;
 }
 
-List *Get_Last_Element(List *head)
+List *Get_Max_Element(List *head)
 {
     List *element = head,    // текущий элемент в списке
         *max_element = head; // адрес максимального элемента в списке
@@ -79,7 +79,7 @@ int main()
 
     list = Enter_List();
 
-    max = Get_Last_Element(list);
+    max = Get_Max_Element(list);
     printf("Адрес максимального элемента списка - %p\n", max);
 
     return 0;
