@@ -61,13 +61,38 @@ List *Get_Last_Element(List *head)
     return element->next;
 }
 
-int Count_List(List *list)
+int Insert_List(int E, List *l1, List *l2)
 {
+    List *element = l1, // текущий элемент в l1
+        *temp = NULL;   // элемент, идущий после E
     int count = 1;
-    List *element = list;
 
-    if (list == NULL)
-        return 0;
+    // если первый или второй список пуст
+    if (l1 == NULL || l2 == NULL)
+        return -1;
+
+    // поиск элемента, содержащий E
+    while (element->value != E && element->next != NULL)
+    {
+
+        element = element->next;
+        count++;
+    }
+
+    // если элемент не найден
+    if (element->value != E && element->next == NULL)
+        return -1;
+
+    temp = element->next; // запоминаем элемент идущий после E
+    element->next = l2;   // добавдяем в l1 l2
+
+    // идем до конца измененного списка
+    while (element->next != NULL)
+    {
+        element = element->next;
+        count++;
+    }
+    element->next = temp; // дабавление к измененному списку элемент, идущий после E
 
     while (element->next != NULL)
     {
@@ -75,40 +100,7 @@ int Count_List(List *list)
         count++;
     }
 
-    return count;
-}
-
-int Insert_List(int E, List *l1, List *l2)
-{
-    List *element = l1, // текущий элемент в l1
-        *temp = NULL;   // элемент, идущий после E
-
-    // если первый список пуст
-    if (l1 == NULL)
-        return 0; // значит его длина = 0
-
-    // если второй список пуст
-    if (l2 == NULL)
-        return Count_List(l1); // возвращаем длину списка l1
-
-    // поиск элемента, содержащий E
-    while (element->value != E && element->next != NULL)
-        element = element->next; // переход
-
-    // если элемент не найден
-    if (element->value != E && element->next == NULL)
-        return Count_List(l1);
-
-    temp = element->next; // запоминаем элемент идущий после E
-    element->next = l2;   // добавдяем в l1 l2
-
-    // идем до конца измененного списка
-    while (element->next != NULL)
-        element = element->next;
-
-    element->next = temp; // дабавление к измененному списку элемент, идущий после E
-
-    return Count_List(l1); // возврат длины нового списка
+    return count; // возврат длины нового списка
 }
 
 int main()
@@ -126,7 +118,10 @@ int main()
     scanf("%d", &E);
 
     count = Insert_List(E, l1, l2);
-    printf("Длина нового списка - %d\n", count);
+    if (count > 0)
+        printf("Длина нового списка - %d.\n", count);
+    else
+        printf("Некорректные данные.");
 
     return 0;
 }
