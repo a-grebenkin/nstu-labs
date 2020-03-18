@@ -52,7 +52,7 @@ int Insert_List(int E, List *l1, List *l2)
 {
     List *element = l1, // текущий элемент в l1
         *temp = NULL;   // элемент, идущий после E
-    int count = 1;
+    int count = 1;      // количество элементов
 
     // если первый или второй список пуст
     if (l1 == NULL || l2 == NULL)
