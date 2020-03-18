@@ -33,12 +33,14 @@ List *Add_last(int n, List *head)
 
 List *Get_Max_Element(List *head)
 {
-    List *element = head,    // текущий элемент в списке
-        *max_element = NULL; // адрес максимального элемента в списке
+    List *element,           // текущий элемент в списке
+        *max_element = head; // адрес максимального элемента в списке
 
     // если список пустой/состоит из 1 элемента
     if (element == NULL || head->next == NULL)
         return head; // возвращаем его
+
+    element = head->next; // переход к следущему элементу
 
     do
     {
