@@ -63,62 +63,53 @@ void Ins_Btree(char *name, char *value, btree **q)
     Ins_Btree(name, value, &(*q)->right);
 }
 
-// получить все дефайны
-btree *getAllDefines(FILE *stream, btree *tree)
+// обработка слов после решетки
+btree *handleSharp(FILE *stream, btree *tree)
 {
   char define_buffer[8], letter, *name, *value, define_str[] = "define ";
   size_t position = 0;
 
-  fseek(stream, 0, 0);
+  fread(define_buffer, sizeof(char), 7, stream);
+  define_buffer[7] = '\0';
+
+  if (compareStrings(define_buffer, define_str))
+    return tree;
+
+  name = (char *)calloc(1, sizeof(char));
 
   while (!feof(stream))
   {
     fread(&letter, sizeof(char), 1, stream);
-    if (letter != '#')
-      continue;
 
-    fread(define_buffer, sizeof(char), 7, stream);
-    define_buffer[7] = '\0';
+    if (letter == ' ')
+      break;
 
-    if (compareStrings(define_buffer, define_str))
-      continue;
+    name[position] = letter;
+    position++;
 
-    name = new char[1];
-
-    while (!feof(stream))
-    {
-      fread(&letter, sizeof(char), 1, stream);
-
-      if (letter == ' ')
-        break;
-
-      name[position] = letter;
-      position++;
-
-      name = (char *)realloc(name, sizeof(char) * (position + 1));
-    }
-
-    name[position] = '\0';
-    value = new char[1];
-    position = 0;
-
-    while (!feof(stream))
-    {
-      fread(&letter, sizeof(char), 1, stream);
-
-      if (letter == '\n' || letter == '\0')
-        break;
-
-      value[position] = letter;
-      position++;
-
-      value = (char *)realloc(value, sizeof(char) * (position + 1));
-    }
-    value[position] = '\0';
-    position = 0;
-
-    Ins_Btree(name, value, &tree);
+    name = (char *)realloc(name, sizeof(char) * (position + 1));
   }
+
+  name[position] = '\0';
+  value = (char *)calloc(1, sizeof(char));
+  position = 0;
+
+  while (!feof(stream))
+  {
+    fread(&letter, sizeof(char), 1, stream);
+
+    if (letter == '\n' || letter == '\0')
+      break;
+
+    value[position] = letter;
+    position++;
+
+    value = (char *)realloc(value, sizeof(char) * (position + 1));
+  }
+  value[position] = '\0';
+  position = 0;
+
+  Ins_Btree(name, value, &tree);
 
   return tree;
 }
@@ -147,6 +138,7 @@ void replaceAllDefines(FILE *reader, FILE *writer, btree *tree)
   char letter = '\0', previous, *temp;
   size_t position;
   btree *item;
+  long point, difference;
 
   fseek(reader, 0, 0);
   fseek(writer, 0, 0);
@@ -158,20 +150,24 @@ void replaceAllDefines(FILE *reader, FILE *writer, btree *tree)
 
     if (letter == '#')
     {
-      do
-      {
-        fwrite(&letter, sizeof(char), 1, writer);
-        fread(&letter, sizeof(char), 1, reader);
-
-      } while (!feof(reader) && letter != '\n');
-
       fwrite(&letter, sizeof(char), 1, writer);
+
+      point = ftell(reader);
+      tree = handleSharp(reader, tree);
+
+      difference = ftell(reader) - point;
+      fseek(reader, difference * (-1), 1);
+
+      temp = (char *)calloc(difference, sizeof(char));
+      fread(temp, sizeof(char), difference, reader);
+      fwrite(temp, sizeof(char), difference, writer);
+
       continue;
     }
 
     if (isalpha(letter) && (previous == ' ' || previous == '(' || previous == ',' || previous == '\n'))
     {
-      temp = new char[2];
+      temp = (char *)calloc(2, sizeof(char));
       temp[0] = letter;
       position = 1;
 
@@ -216,15 +212,15 @@ int main()
 
   scanf("%s", filename);
   stream_reader = fopen(filename, "r");
-  test_tree = getAllDefines(stream_reader, test_tree);
-  
+
   scanf("%s", filename);
   stream_writer = fopen(filename, "w");
 
   replaceAllDefines(stream_reader, stream_writer, test_tree);
-  
+
   printf("done.\n");
-  fcloseall();
+  fclose(stream_reader);
+  fclose(stream_writer);
 
   return 0;
 }
