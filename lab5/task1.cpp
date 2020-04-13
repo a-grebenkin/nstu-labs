@@ -396,5 +396,4 @@ int main()
 
     max = Get_Max_Element(list);
     printf("Адрес максимального элемента списка - %p\n", max);
-    Print_list(list);
 }
