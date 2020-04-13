@@ -366,16 +366,6 @@ List<T> *Enter_List()
         getchar();
     }
     while (getchar()=='\n');
-    /*char *input = (char *)calloc(25, sizeof(char));
-    fgets(input, 25, stdin);
-    input[strlen(input) - 1] = '\0';
-
-    while (input[0] != '\0')
-    {
-        list = Ins_last(list,atoi(input));
-        fgets(input, 25, stdin);
-        input[strlen(input) - 1] = '\0';
-    } */
     return list;
 }
 
