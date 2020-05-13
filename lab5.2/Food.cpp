@@ -3,24 +3,28 @@
 
 using namespace std;
 
-Food::Food(string name, float weight, int temperature, int max_temperature, int min_temperature, float heat_capacity)
+Food::Food(string name, double weight, double temperature, double max_temperature, double min_temperature, double heat_capacity):
+name(name),
+temperature(temperature),
+max_temperature(max_temperature),
+min_temperature(min_temperature)
 {
     if (weight <= 0)
         throw(string) "weight must be greater than 0";
 
-    this->name = name;
+    if (heat_capacity<=0)
+       throw(string) "heat capacity must be greater than 0";
+    
     this->weight = weight;
-    this->temperature = temperature;
-    this->max_temperature = max_temperature;
-    this->min_temperature = min_temperature;
+
     this->heat_capacity = heat_capacity;
 
     if (temperature >= max_temperature)
-        this->condition = 2;
+        this->condition = overheated;
     else if (min_temperature >= temperature)
-        this->condition = 1;
+        this->condition = frozen;
     else
-        this->condition = 0;
+        this->condition = overheated;
 }
 
 string Food::GetName()
@@ -28,27 +32,27 @@ string Food::GetName()
     return name;
 }
 
-float Food::GetWeight()
+double Food::GetWeight()
 {
     return weight;
 }
 
-int Food::GetTemperature()
+double Food::GetTemperature()
 {
     return temperature;
 }
 
-int Food::GetMaxTemperature()
+double Food::GetMaxTemperature()
 {
     return max_temperature;
 }
 
-int Food::GetMinTemperature()
+double Food::GetMinTemperature()
 {
     return min_temperature;
 }
 
-int Food::GetCondition()
+condition_food Food::GetCondition()
 {
     return condition;
 }
@@ -59,9 +63,9 @@ void Food::TransferThermalEnergy(int Q)
 
     if (!condition)
         if (temperature >= max_temperature)
-            condition = 2;
+            condition = overheated;
         else if (min_temperature >= temperature)
-            condition = 1;
+            condition = frozen;
 }
 
 int Food::GetPossibleTemperature(int Q)
@@ -73,11 +77,11 @@ string Food::GetStatus()
 {
     switch (condition)
     {
-    case 0:
+    case normal:
         return "Нормальное";
-    case 1:
+    case frozen:
         return "Переоморожен";
-    case 2:
+    case overheated:
         return "Перегрет";
     default:
         return "Неизвестное";
