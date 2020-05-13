@@ -5,20 +5,19 @@ int main()
 {
   setlocale(LC_ALL, "Russian");
 
-  const int temp = 10,
-            min_temp = 0,
-            max_temp = 20,
-            capacity = 460,
-            q = 45000;
-
-  const double weight = 0.11;
+  const double  temp = 10.0, //°С
+                min_temp = 0.0, //°С
+                max_temp = 20.0, //°С
+                capacity = 460.0, //J·kg^−1·K^−1
+                q = 45000.0,  // J
+                weight = 0.11; //kg
 
   const string name = "Test";
 
   try
   {
     cout << "Создание класса с отрицательным весом." << endl;
-    auto error = Food(name, -5, 1, 2, 3, 4);
+    auto error = Food(name, -5.0, 1.0, 2.0, 3.0, 4.0);
   }
   catch (const string &e)
   {
