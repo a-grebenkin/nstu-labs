@@ -5,28 +5,28 @@ int main()
 {
   setlocale(LC_ALL, "Russian");
 
-  const double  temp = 10.0, //°С
-                min_temp = 0.0, //°С
-                max_temp = 20.0, //°С
-                capacity = 460.0, //J·kg^−1·K^−1
-                q = 45000.0,  // J
-                weight = 0.11; //kg
+  const double temp = 10.0, //°С
+      min_temp = 0.0,       //°С
+      max_temp = 20.0,      //°С
+      capacity = 460.0,     //J·kg^−1·K^−1
+      q = 45000.0,          // J
+      weight = 0.11;        //kg
 
   const string name = "Test";
 
   try
   {
     cout << "Создание класса с отрицательным весом." << endl;
-    auto error = Food(name, -5.0, 1.0, 2.0, 3.0, 4.0);
+    Food error_food = Food(name, -5.0, 1.0, 2.0, 3.0, 4.0);
   }
-  catch (const string &e)
+  catch (const invalid_argument &e)
   {
-    cout << "Исключение: " << e << endl;
+    cout << "Исключение: " << e.what() << endl;
   }
 
   cout << endl;
 
-  auto test = Food(name, weight, temp, max_temp, min_temp, capacity);
+  Food test = Food(name, weight, temp, max_temp, min_temp, capacity);
 
   cout << "Демонстрация методов:" << endl;
   cout << "Имя: " << test.GetName() << endl;

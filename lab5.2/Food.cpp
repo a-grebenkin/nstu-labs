@@ -1,58 +1,59 @@
 #include "Food.h"
 #include <iostream>
+#include <stdexcept>
 
 using namespace std;
 
-Food::Food(string name, double weight, double temperature, double max_temperature, double min_temperature, double heat_capacity):
-name(name),
-temperature(temperature),
-max_temperature(max_temperature),
-min_temperature(min_temperature)
+Food::Food(const string &name, double weight, double temperature, double max_temperature, 
+    double min_temperature, double heat_capacity) 
+: name(name), temperature(temperature), max_temperature(max_temperature), min_temperature(min_temperature)
 {
+    if (name.empty())
+        throw invalid_argument("name must be not empty");
+
     if (weight <= 0)
-        throw(string) "weight must be greater than 0";
+        throw invalid_argument("weight must be greater than 0");
 
-    if (heat_capacity<=0)
-       throw(string) "heat capacity must be greater than 0";
-    
+    if (heat_capacity <= 0)
+        throw invalid_argument("heat capacity must be greater than 0");
+
     this->weight = weight;
-
     this->heat_capacity = heat_capacity;
 
     if (temperature >= max_temperature)
-        this->condition = overheated;
+        this->condition = OVERHEATED;
     else if (min_temperature >= temperature)
-        this->condition = frozen;
+        this->condition = FROZEN;
     else
-        this->condition = overheated;
+        this->condition = OVERHEATED;
 }
 
-string Food::GetName()
+string Food::GetName() const
 {
     return name;
 }
 
-double Food::GetWeight()
+double Food::GetWeight() const
 {
     return weight;
 }
 
-double Food::GetTemperature()
+double Food::GetTemperature() const
 {
     return temperature;
 }
 
-double Food::GetMaxTemperature()
+double Food::GetMaxTemperature() const
 {
     return max_temperature;
 }
 
-double Food::GetMinTemperature()
+double Food::GetMinTemperature() const
 {
     return min_temperature;
 }
 
-condition_food Food::GetCondition()
+CONDITION Food::GetCondition() const
 {
     return condition;
 }
@@ -63,25 +64,25 @@ void Food::TransferThermalEnergy(int Q)
 
     if (!condition)
         if (temperature >= max_temperature)
-            condition = overheated;
+            condition = OVERHEATED;
         else if (min_temperature >= temperature)
-            condition = frozen;
+            condition = FROZEN;
 }
 
-int Food::GetPossibleTemperature(int Q)
+double Food::GetPossibleTemperature(int Q) const
 {
-    return (int)(temperature + (Q / (weight * heat_capacity)));
+    return (temperature + (Q / (weight * heat_capacity)));
 }
 
-string Food::GetStatus()
+string Food::GetStatus() const
 {
     switch (condition)
     {
-    case normal:
+    case NORMAL:
         return "Нормальное";
-    case frozen:
+    case FROZEN:
         return "Переоморожен";
-    case overheated:
+    case OVERHEATED:
         return "Перегрет";
     default:
         return "Неизвестное";
