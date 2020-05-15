@@ -27,9 +27,9 @@ public:
 
     CONDITION GetCondition() const;
 
-    void TransferThermalEnergy(int Q);
+    void TransferThermalEnergy(double Q);
 
-    double GetPossibleTemperature(int Q) const;
+    double GetPossibleTemperature(double Q) const;
 
     string GetStatus() const;
 

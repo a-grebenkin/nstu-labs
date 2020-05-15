@@ -19,13 +19,12 @@ Food::Food(const string &name, double weight, double temperature, double max_tem
 
     this->weight = weight;
     this->heat_capacity = heat_capacity;
+    this->condition = NORMAL;
 
     if (temperature >= max_temperature)
         this->condition = OVERHEATED;
     else if (min_temperature >= temperature)
         this->condition = FROZEN;
-    else
-        this->condition = OVERHEATED;
 }
 
 string Food::GetName() const
@@ -58,7 +57,7 @@ CONDITION Food::GetCondition() const
     return condition;
 }
 
-void Food::TransferThermalEnergy(int Q)
+void Food::TransferThermalEnergy(double Q)
 {
     temperature = GetPossibleTemperature(Q);
 
@@ -69,7 +68,7 @@ void Food::TransferThermalEnergy(int Q)
             condition = FROZEN;
 }
 
-double Food::GetPossibleTemperature(int Q) const
+double Food::GetPossibleTemperature(double Q) const
 {
     return (temperature + (Q / (weight * heat_capacity)));
 }
