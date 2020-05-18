@@ -1,18 +1,32 @@
 #pragma once
+
 #include <iostream>
-#include <vector>
+#include <list>
 #include "Food.h"
+
 using namespace std;
-class Bag{
+class Bag
+{
 public:
-    double GetWeight();
-    double GetNumber();
-    int GetNumberDamaged();
-    int GetNumberPossibleDamaged(double Q);
-    void PutFood(Food f);
-    void RemoveFood(int n);
-    vector <Food> product_list;
+    explicit Bag(double _max_weight);
+
+    double GetWeight() const;
+
+    double GetCount() const;
+
+    int GetNumberDamaged() const;
+
+    int GetNumberPossibleDamaged(double Q) const;
+
+    bool PutFood(const Food &food);
+
+    void RemoveFood(int index);
+
+    Food GetFood(int index) const;
+
 private:
-    double max_weight;
-    double weight;
+    double max_weight,
+        weight;
+
+    list<Food> product_list;
 };

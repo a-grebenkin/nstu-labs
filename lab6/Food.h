@@ -3,16 +3,16 @@
 
 using namespace std;
 
-enum CONDITION
-{
-    NORMAL,    // нормальное состояние
-    FROZEN,    // перегрет
-    OVERHEATED // переморожен
-};
-
 class Food
 {
 public:
+    enum CONDITION
+    {
+        NORMAL,    // нормальное состояние
+        FROZEN,    // перегрет
+        OVERHEATED // переморожен
+    };
+
     Food(const string &name, double weight, double temperature, double max_temperature, double min_temperature, double heat_capacity);
 
     string GetName() const;
@@ -20,20 +20,20 @@ public:
     double GetWeight() const;
 
     double GetTemperature() const;
-    
-    double GetHeatCapacity() const;
 
     double GetMaxTemperature() const;
 
     double GetMinTemperature() const;
 
+    double GetHeatCapacity() const;
+
     CONDITION GetCondition() const;
 
-    void SetTemperature(double temperature);
-    
     void TransferThermalEnergy(double Q);
 
     double GetPossibleTemperature(double Q) const;
+
+    void SetTemperature(double temp);
 
     string GetStatus() const;
 
@@ -50,5 +50,7 @@ private:
 
     CONDITION condition;
 
-    double heat_capacity; //J·kg^−1·K^−1
+    double heat_capacity; //J·kg^−1·°С^−1
+
+    void updateCondition();
 };

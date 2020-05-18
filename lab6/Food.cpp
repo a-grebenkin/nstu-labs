@@ -1,12 +1,13 @@
 #include "Food.h"
-#include <iostream>
 #include <stdexcept>
 
 using namespace std;
 
-Food::Food(const string &name, double weight, double temperature, double max_temperature,
-    double min_temperature, double heat_capacity)
-: name(name), temperature(temperature), max_temperature(max_temperature), min_temperature(min_temperature)
+Food::Food(const string& name, double weight, double temperature, double max_temperature, double min_temperature, double heat_capacity):
+        name(name),
+        temperature(temperature),
+        max_temperature(max_temperature),
+        min_temperature(min_temperature)
 {
     if (name.empty())
         throw invalid_argument("name must be not empty");
@@ -17,13 +18,20 @@ Food::Food(const string &name, double weight, double temperature, double max_tem
     if (heat_capacity <= 0)
         throw invalid_argument("heat capacity must be greater than 0");
 
+    if (temperature < -273.15)
+        throw invalid_argument("temperature must be greater than or equal to absolute zero of temperature");
+
+    if (temperature < -273.15)
+        throw invalid_argument("min_temperature must be greater than or equal to absolute zero of temperature");
+
+    if (max_temperature < -273.15)
+        throw invalid_argument("max_temperature must be greater than or equal to absolute zero of temperature");
+
     this->weight = weight;
     this->heat_capacity = heat_capacity;
+
     this->condition = NORMAL;
-    if (temperature >= max_temperature)
-        this->condition = OVERHEATED;
-    else if (min_temperature >= temperature)
-        this->condition = FROZEN;
+    this->updateCondition();
 }
 
 string Food::GetName() const
@@ -41,11 +49,6 @@ double Food::GetTemperature() const
     return temperature;
 }
 
-double Food:: GetHeatCapacity() const
-{
-    return heat_capacity;
-}
-
 double Food::GetMaxTemperature() const
 {
     return max_temperature;
@@ -56,29 +59,16 @@ double Food::GetMinTemperature() const
     return min_temperature;
 }
 
-CONDITION Food::GetCondition() const
+Food::CONDITION Food::GetCondition() const
 {
     return condition;
 }
 
-void Food:: SetTemperature(double temperature)
-{
-    this->temperature=temperature;
-    if (!condition)
-    if (temperature >= max_temperature)
-        condition = OVERHEATED;
-    else if (min_temperature >= temperature)
-        condition = FROZEN;
-}
 void Food::TransferThermalEnergy(double Q)
 {
     temperature = GetPossibleTemperature(Q);
-    condition=NORMAL;
-    if (!condition)
-        if (temperature >= max_temperature)
-            condition = OVERHEATED;
-        else if (min_temperature >= temperature)
-            condition = FROZEN;
+
+    updateCondition();
 }
 
 double Food::GetPossibleTemperature(double Q) const
@@ -90,13 +80,33 @@ string Food::GetStatus() const
 {
     switch (condition)
     {
-    case NORMAL:
-        return "Нормальное";
-    case FROZEN:
-        return "Переоморожен";
-    case OVERHEATED:
-        return "Перегрет";
-    default:
-        return "Неизвестное";
+        case NORMAL:
+            return "Нормальное";
+        case FROZEN:
+            return "Переоморожен";
+        case OVERHEATED:
+            return "Перегрет";
+        default:
+            return "Неизвестное";
     }
+}
+
+void Food::updateCondition() 
+{
+    if (condition == CONDITION::NORMAL)
+        if (temperature >= max_temperature)
+            condition = OVERHEATED;
+        else if (min_temperature >= temperature)
+            condition = FROZEN;
+}
+
+double Food::GetHeatCapacity() const 
+{
+    return heat_capacity;
+}
+
+void Food::SetTemperature(double temp) {
+    temperature = temp;
+
+    updateCondition();
 }
