@@ -12,7 +12,7 @@ public:
 
     double GetWeight() const;
 
-    double GetCount() const;
+    int GetCount() const;
 
     int GetNumberDamaged() const;
 
