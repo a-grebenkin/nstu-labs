@@ -36,7 +36,8 @@ public:
     void SetTemperature(double temp);
 
     string GetStatus() const;
-
+    
+    void PrintInfo();
 private:
     string name;
 
@@ -52,5 +53,6 @@ private:
 
     double heat_capacity; //J·kg^−1·°С^−1
 
-    void updateCondition();
+    void UpdateCondition();
+    
 };
