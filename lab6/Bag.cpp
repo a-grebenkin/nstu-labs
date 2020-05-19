@@ -8,7 +8,7 @@ double Bag::GetWeight() const
     return weight;
 }
 
-double Bag::GetCount() const
+int Bag::GetCount() const
 {
     return product_list.size();
 }
