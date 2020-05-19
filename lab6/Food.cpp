@@ -31,7 +31,7 @@ Food::Food(const string& name, double weight, double temperature, double max_tem
     this->heat_capacity = heat_capacity;
 
     this->condition = NORMAL;
-    this->updateCondition();
+    this->UpdateCondition();
 }
 
 string Food::GetName() const
@@ -68,7 +68,7 @@ void Food::TransferThermalEnergy(double Q)
 {
     temperature = GetPossibleTemperature(Q);
 
-    updateCondition();
+    UpdateCondition();
 }
 
 double Food::GetPossibleTemperature(double Q) const
@@ -91,7 +91,7 @@ string Food::GetStatus() const
     }
 }
 
-void Food::updateCondition() 
+void Food::UpdateCondition()
 {
     if (condition == CONDITION::NORMAL)
         if (temperature >= max_temperature)
@@ -100,7 +100,7 @@ void Food::updateCondition()
             condition = FROZEN;
 }
 
-double Food::GetHeatCapacity() const 
+double Food::GetHeatCapacity() const
 {
     return heat_capacity;
 }
@@ -108,5 +108,14 @@ double Food::GetHeatCapacity() const
 void Food::SetTemperature(double temp) {
     temperature = temp;
 
-    updateCondition();
+    UpdateCondition();
+}
+
+void Food::PrintInfo(){
+    cout << "Имя: " << GetName() << endl;
+    cout << "Температура: " << GetTemperature() << endl;
+    cout << "Мин. температура: " << GetMinTemperature() << endl;
+    cout << "Макс. температура: " << GetMaxTemperature() << endl;
+    cout << "Масса: " << GetWeight() << endl;
+    cout << "Состояние: " << GetStatus() << endl;
 }
