@@ -11,7 +11,7 @@ int main()
         temp2 = 24.0, temp3 = 24.0,                                  //°С
         min_temp1 = 0.0, min_temp2 = 0.0, min_temp3 = 0.0,           //°С
         max_temp1 = 20.0, max_temp2 = 40.0, max_temp3 = 30.0,        //°С
-        capacity1 = 2800.0, capacity2 = 9000.0, capacity3 = 17150.0, //J·kg^−1·K^−1
+        capacity1 = 2800.0, capacity2 = 9000.0, capacity3 = 17150.0, //J·kg^−1·°С^−1
         weight1 = 0.7, weight2 = 1.0, weight3 = 5.0,                 //kg
         max_weight = 10;                                             //kg
 
