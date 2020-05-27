@@ -16,14 +16,15 @@ public:
 
     int GetNumberDamaged() const;
 
-    int GetNumberPossibleDamaged(double Q) const;
+    int GetNumberPossibleDamaged(list<Food> product_list) const;
 
     bool PutFood(const Food &food);
 
-    void RemoveFood(int index);
+    void RemoveFood(size_t index);
 
-    Food GetFood(int index) const;
+    Food GetFood(size_t index) const;
 
+    Food& operator[] (const size_t index);
 private:
     double max_weight,
         weight;
