@@ -6,7 +6,7 @@ using namespace std;
 class Food
 {
 public:
-    enum CONDITION
+    enum class CONDITION
     {
         NORMAL,    // нормальное состояние
         FROZEN,    // перегрет
@@ -37,7 +37,8 @@ public:
 
     string GetStatus() const;
     
-    void PrintInfo();
+    string GetStringInfo() const;
+    
 private:
     string name;
 
