@@ -18,19 +18,21 @@ Food::Food(const string& name, double weight, double temperature, double max_tem
     if (heat_capacity <= 0)
         throw invalid_argument("heat capacity must be greater than 0");
 
-    if (temperature < -273.15)
-        throw invalid_argument("temperature must be greater than or equal to absolute zero of temperature");
-
-    if (temperature < -273.15)
+    if (min_temperature < -273.15)
         throw invalid_argument("min_temperature must be greater than or equal to absolute zero of temperature");
 
     if (max_temperature < -273.15)
         throw invalid_argument("max_temperature must be greater than or equal to absolute zero of temperature");
-
+    
+    if (max_temperature < min_temperature)
+        throw invalid_argument("max_temperature must be greater than or equal to min_temperature");
+    
+    SetTemperature(temperature);
+    
     this->weight = weight;
     this->heat_capacity = heat_capacity;
 
-    this->condition = NORMAL;
+    this->condition = CONDITION::NORMAL;
     this->UpdateCondition();
 }
 
@@ -80,11 +82,11 @@ string Food::GetStatus() const
 {
     switch (condition)
     {
-        case NORMAL:
+        case CONDITION::NORMAL:
             return "Нормальное";
-        case FROZEN:
+        case CONDITION::FROZEN:
             return "Переоморожен";
-        case OVERHEATED:
+        case CONDITION::OVERHEATED:
             return "Перегрет";
         default:
             return "Неизвестное";
@@ -95,9 +97,9 @@ void Food::UpdateCondition()
 {
     if (condition == CONDITION::NORMAL)
         if (temperature >= max_temperature)
-            condition = OVERHEATED;
+            condition = CONDITION::OVERHEATED;
         else if (min_temperature >= temperature)
-            condition = FROZEN;
+            condition = CONDITION::FROZEN;
 }
 
 double Food::GetHeatCapacity() const
@@ -105,17 +107,22 @@ double Food::GetHeatCapacity() const
     return heat_capacity;
 }
 
-void Food::SetTemperature(double temp) {
+void Food::SetTemperature(double temp)
+{
+    if (temp < -273.15)
+    throw invalid_argument("temperature must be greater than or equal to absolute zero of temperature");
     temperature = temp;
-
     UpdateCondition();
 }
 
-void Food::PrintInfo(){
-    cout << "Имя: " << GetName() << endl;
-    cout << "Температура: " << GetTemperature() << endl;
-    cout << "Мин. температура: " << GetMinTemperature() << endl;
-    cout << "Макс. температура: " << GetMaxTemperature() << endl;
-    cout << "Масса: " << GetWeight() << endl;
-    cout << "Состояние: " << GetStatus() << endl;
+string  Food::GetStringInfo() const
+{
+    string s;
+    s+="Имя: "+GetName()+'\n';
+    s+="Температура: " + to_string(GetTemperature()) + '\n';
+    s+="Мин. температура: " + to_string(GetMinTemperature())+'\n';
+    s+="Макс. температура: "+ to_string(GetMaxTemperature())+'\n';
+    s+= "Масса: " + to_string(GetWeight()) +'\n';
+    s+="Состояние: " +  GetStatus() +'\n';
+    return s;
 }
