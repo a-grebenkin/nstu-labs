@@ -16,18 +16,19 @@ int Bag::GetCount() const
 int Bag::GetNumberDamaged() const
 {
     list<Food> temp = product_list;
-    temp.remove_if([](const Food &product) { return product.GetCondition() == Food::NORMAL; });
+    temp.remove_if([](const Food &product) { return product.GetCondition() == Food::CONDITION::NORMAL; });
 
     return temp.size();
 }
 
-int Bag::GetNumberPossibleDamaged(double Q) const
+int Bag::GetNumberPossibleDamaged(list<Food> product_list) const
 {
-    list<Food> temp = product_list;
+   /* list<Food> temp = product_list;
 
     temp.remove_if([Q](const Food &product) { return product.GetPossibleTemperature(Q) <= product.GetMaxTemperature(); });
 
-    return temp.size();
+    return temp.size(); */
+    return 0;
 }
 
 bool Bag::PutFood(const Food &food)
@@ -45,10 +46,10 @@ bool Bag::PutFood(const Food &food)
 
     auto it = product_list.begin();
 
-    double k1 = 0, //k1=c1m1+c2m2+...+c(n-1)m(n-1);
-        t1 = it->GetTemperature(),
-           k2 = food.GetWeight() * food.GetHeatCapacity(),
-           t2 = food.GetTemperature();
+    double  k1 = 0,                                          //k1=c1m1+c2m2+...+c(n-1)m(n-1)
+            t1 = it->GetTemperature(),
+            k2 = food.GetWeight() * food.GetHeatCapacity(),
+            t2 = food.GetTemperature();
 
     for (const Food &elem : product_list)
         k1 += elem.GetWeight() * elem.GetHeatCapacity();
@@ -63,8 +64,11 @@ bool Bag::PutFood(const Food &food)
     return true;
 }
 
-void Bag::RemoveFood(int index)
+void Bag::RemoveFood(size_t index)
 {
+    if(index<0 || index>product_list.size())
+        throw invalid_argument("index must be greater than 0 and no more than the number of products");
+    
     auto element = product_list.begin();
     advance(element, index);
 
@@ -72,16 +76,15 @@ void Bag::RemoveFood(int index)
     product_list.erase(element);
 }
 
-Food Bag::GetFood(int index) const
-{
-    auto element = product_list.begin();
-    advance(element, index);
-
-    return *element;
-}
-
 Bag::Bag(double max_weight) : max_weight(max_weight), weight(0)
 {
     if (max_weight <= 0)
         throw invalid_argument("weight must be greater than 0");
+}
+
+Food& Bag:: operator[] (const size_t index)
+{
+    auto element = product_list.begin();
+    advance(element, index);
+    return *element;
 }
