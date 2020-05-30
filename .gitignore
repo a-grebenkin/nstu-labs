@@ -1,4 +1,5 @@
 .vscode
+.idea
 
 # linux
 *.out
@@ -11,3 +12,6 @@
 
 # macos
 **/*.out.dSYM
+
+# CMake
+**/cmake-build-debug
