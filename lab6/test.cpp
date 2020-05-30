@@ -34,38 +34,31 @@ int main()
         cout << "Добавление 1 продукта" << endl;
         Food test1 = Food("Молоко", weight1, temp1, max_temp1, min_temp1, capacity1);
         bag.PutFood(test1);
-        test1.PrintInfo();
         cout << endl;
 
         cout << "1 продукт после добавления в сумку" << endl;
-        bag.GetFood(0).PrintInfo();
         cout << endl;
 
         cout << "Добавление 2 продукта" << endl;
         Food test2 = Food("Хлеб", weight2, temp2, max_temp2, min_temp2, capacity2);
         bag.PutFood(test2);
-        test2.PrintInfo();
         cout << endl;
 
         cout << "2 продукт после добавления в сумку" << endl;
-        bag.GetFood(1).PrintInfo();
         cout << endl;
 
         cout << "Добавление 3 продукта" << endl;
         Food test3 = Food("Сахар", weight3, temp3, max_temp3, min_temp3, capacity3);
         bag.PutFood(test3);
-        test3.PrintInfo();
         cout << endl;
 
         cout << "3 продукт после добавления в сумку" << endl;
-        bag.GetFood(2).PrintInfo();
         cout << endl;
 
         cout << "Итоговое содержимое сумки" << endl;
         for (int i = 0; i < bag.GetCount(); i++)
         {
             cout << i + 1 << " продукт" << endl;
-            bag.GetFood(i).PrintInfo();
             cout << endl;
         }
     }

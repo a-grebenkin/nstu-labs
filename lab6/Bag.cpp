@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Bag.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -15,59 +16,32 @@ int Bag::GetCount() const
 
 int Bag::GetNumberDamaged() const
 {
-    list<Food> temp = product_list;
-    temp.remove_if([](const Food &product) { return product.GetCondition() == Food::CONDITION::NORMAL; });
-
-    return temp.size();
+    return CountDamaged(product_list);
 }
 
-int Bag::GetNumberPossibleDamaged(list<Food> product_list) const
+int Bag::GetNumberPossibleDamaged(const list<Food> &food_list) const
 {
-   /* list<Food> temp = product_list;
+    list<Food> temp = product_list;
+    double _weight = weight, _max = max_weight;
 
-    temp.remove_if([Q](const Food &product) { return product.GetPossibleTemperature(Q) <= product.GetMaxTemperature(); });
+    for (const Food& product : food_list)
+        AddToList(product, temp, _weight, _max);
 
-    return temp.size(); */
-    return 0;
+    return CountDamaged(temp);
 }
 
 bool Bag::PutFood(const Food &food)
 {
-    if (weight + food.GetWeight() > max_weight)
-        return false;
-
-    weight += food.GetWeight();
-
-    if (product_list.empty())
-    {
-        product_list.push_back(food);
-        return true;
-    }
-
-    auto it = product_list.begin();
-
-    double  k1 = 0,                                          //k1=c1m1+c2m2+...+c(n-1)m(n-1)
-            t1 = it->GetTemperature(),
-            k2 = food.GetWeight() * food.GetHeatCapacity(),
-            t2 = food.GetTemperature();
-
-    for (const Food &elem : product_list)
-        k1 += elem.GetWeight() * elem.GetHeatCapacity();
-
-    product_list.push_back(food);
-
-    double t = (k1 * t1 + k2 * t2) / (k1 + k2);
-
-    for (Food &elem : product_list)
-        elem.SetTemperature(t);
-
-    return true;
+    return AddToList(food, product_list, weight, max_weight);
 }
 
-void Bag::RemoveFood(size_t index)
+void Bag::RemoveFood(int index)
 {
-    if(index<0 || index>product_list.size())
-        throw invalid_argument("index must be greater than 0 and no more than the number of products");
+    if (index < 0)
+        throw invalid_argument("index must be greater than 0");
+
+    if (index > product_list.size())
+        throw invalid_argument("no more than the number of products");
     
     auto element = product_list.begin();
     advance(element, index);
@@ -82,9 +56,48 @@ Bag::Bag(double max_weight) : max_weight(max_weight), weight(0)
         throw invalid_argument("weight must be greater than 0");
 }
 
-Food& Bag:: operator[] (const size_t index)
+Food& Bag::operator[] (int index)
 {
+    if (index < 0)
+        throw invalid_argument("index must be greater or equal 0");
+
     auto element = product_list.begin();
     advance(element, index);
     return *element;
+}
+
+bool Bag::AddToList(const Food &food, list<Food> _list, double &_weight, double &_max_weight) {
+    if (_weight + food.GetWeight() > _max_weight)
+        return false;
+
+    _weight += food.GetWeight();
+
+    if (_list.empty())
+    {
+        _list.push_back(food);
+        return true;
+    }
+
+    auto it = _list.begin();
+
+    double  k1 = 0,                                          //k1=c1m1+c2m2+...+c(n-1)m(n-1)
+            t1 = it->GetTemperature(),
+            k2 = food.GetWeight() * food.GetHeatCapacity(),
+            t2 = food.GetTemperature();
+
+    for (const Food &elem : _list)
+        k1 += elem.GetWeight() * elem.GetHeatCapacity();
+
+    _list.push_back(food);
+
+    double t = (k1 * t1 + k2 * t2) / (k1 + k2);
+
+    for (Food &elem : _list)
+        elem.SetTemperature(t);
+
+    return true;
+}
+
+int Bag::CountDamaged(list<Food> _list) {
+    return count_if(_list.begin(), _list.end(), [](const Food &product) { return product.GetCondition() != Food::CONDITION::NORMAL; });
 }
