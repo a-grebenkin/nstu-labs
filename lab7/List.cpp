@@ -1,15 +1,9 @@
 #include "List.h"
-#include <iostream>
+#include <stdexcept>
 
 template <class T>
-List<T>::List():n(0){
-    
-};
-
-template <class T>
-void List<T>:: pop_front(){
-    n--;
-    if(head)
+void List<T>::pop_front(){
+    if (head)
     {
         Node<T> *tmp = head;
         tmp = tmp->next;
@@ -19,9 +13,8 @@ void List<T>:: pop_front(){
 }
 
 template <class T>
-void List<T>:: pop_back(){
-    n--;
-    if(temp){
+void List<T>::pop_back(){
+    if (temp) {
         Node<T> *current = temp;
         current=current->last;
         delete current->next;
@@ -30,11 +23,11 @@ void List<T>:: pop_back(){
 };
 
 template <class T>
-void List<T>:: push_front(T data){
-    n++;
-    Node<T> *nd = new Node<T>(data);
+void List<T>::push_front(T data){
+    auto *nd = new Node<T>(data);
     temp = nd;
-    if(head)
+
+    if (head)
     {
         Node<T> *tmp = head;
         head = nd;
@@ -48,10 +41,11 @@ void List<T>:: push_front(T data){
 }
 
 template <class T>
-void List<T>:: push_back(T data){
-    Node<T> *nd = new Node<T>(data, NULL, temp);
+void List<T>::push_back(T data){
+    auto *nd = new Node<T>(data, nullptr, temp);
     temp = nd;
-    if(head)
+
+    if (head)
     {
         Node<T> *current = head;
         while(current->next){
@@ -64,6 +58,86 @@ void List<T>:: push_back(T data){
 }
 
 template <class T>
-int List<T>:: size(){
-    return n;
+size_t List<T>::size() const{
+    size_t counter = 0;
+
+    Node<T> *node = this->head;
+
+    while (node != nullptr)
+    {
+        counter++;
+        node = node->getNext();
+    }
+
+    return counter;
+}
+
+template<class T>
+bool List<T>::empty() const {
+    return head == nullptr;
+}
+
+template<class T>
+size_t List<T>::count_if(const function<bool(T)> &query) const {
+    size_t counter = 0;
+
+    Node<T> *node = this->head;
+
+    while (node != nullptr)
+    {
+        if (query(node->getData()))
+            counter++;
+
+        node = node->getNext();
+    }
+
+    return counter;
+}
+
+template<class T>
+void List<T>::pop(int index) const {
+    size_t i = 0;
+
+    Node<T> *node = head;
+
+    while (node != nullptr && i != index)
+    {
+        i++;
+        node = node->getNext();
+    }
+
+    if (i != index)
+        return;
+
+    Node<T> *previous = node->getPrevious(), next = node->getNext();
+
+    if (!next == nullptr)
+        next.setPrevious(previous);
+
+    previous->setNext(next);
+
+    delete node;
+}
+
+template<class T>
+T& List<T>::operator[](int index) const {
+    size_t i = 0;
+
+    Node<T> *node = head;
+
+    while (node != nullptr && i != index)
+    {
+        i++;
+        node = node->getNext();
+    }
+
+    if (i != index)
+        throw invalid_argument("index is out of range");
+
+    return *node->getData();
+}
+
+template<class T>
+List<T>::List()  {
+    this->head = nullptr;
 }

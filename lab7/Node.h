@@ -1,5 +1,4 @@
 #pragma once
-#include <iostream>
 
 template <class T>
 class Node
@@ -9,6 +8,16 @@ public:
     Node();
     Node(T data);
     Node(T data, Node *next, Node *last);
+
+    Node<T> *getNext() const;
+
+    Node<T> *getPrevious() const;
+
+    T *getData() const;
+
+    void setNext(Node<T> node);
+
+    void setPrevious(Node<T> node);
 private:
     T data;
     Node *next;
