@@ -57,15 +57,15 @@ void Bag::RemoveFood(int index)
     product_list.pop(index);
 }
 
-Food& Bag::operator[] (int index)
+Food Bag::operator[](int index)
 {
     if (index < 0)
         throw invalid_argument("index must be greater or equal 0");
 
     return product_list[index];
-}
+};
 
-bool Bag::AddToList(const Food &food, List<Food> _list, double &_weight, double &_max_weight) {
+bool Bag::AddToList(Food food, List<Food> &_list, double &_weight, double &_max_weight) {
     if (_weight + food.GetWeight() > _max_weight)
         return false;
 

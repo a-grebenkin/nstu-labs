@@ -15,6 +15,8 @@ public:
 
     Food(const string &name, double weight, double temperature, double max_temperature, double min_temperature, double heat_capacity);
 
+    Food();
+
     string GetName() const;
 
     double GetWeight() const;

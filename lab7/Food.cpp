@@ -126,3 +126,7 @@ string  Food::GetStringInfo() const
     s+="Состояние: " +  GetStatus() +'\n';
     return s;
 }
+
+Food::Food() {
+    return;
+}

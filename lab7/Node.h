@@ -5,19 +5,31 @@ class Node
 {
     //friend class List;
 public:
-    Node();
-    Node(T data);
-    Node(T data, Node *next, Node *last);
+    Node(T &data, Node *next, Node *last) {
+        this->data = data;
+        this->next = next;
+        this->last = last;
+    };
 
-    Node<T> *getNext() const;
+    Node<T> *getNext() const {
+        return next;
+    };
 
-    Node<T> *getPrevious() const;
+    Node<T> *getPrevious() const {
+        return last;
+    };
 
-    T *getData() const;
+    T &getData() {
+        return data;
+    };
 
-    void setNext(Node<T> node);
+    void setNext(Node<T> *node) {
+        next = node;
+    };
 
-    void setPrevious(Node<T> node);
+    void setPrevious(Node<T> *node) {
+        last = node;
+    };
 private:
     T data;
     Node *next;
