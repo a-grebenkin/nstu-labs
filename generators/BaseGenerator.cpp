@@ -57,12 +57,17 @@ double BaseGenerator::average() const {
 double BaseGenerator::expectedValue() {
     double sum = 0;
 
-    for (auto generator : BaseGenerator::allGenerators)
+    for (BaseGenerator* generator : BaseGenerator::allGenerators)
+    {
+        if (generator == nullptr) // проверка на существование (см. деструктор)
+            continue;
+
         sum += generator->average();
+    }
 
     return sum / BaseGenerator::allGenerators.size();
 }
 
 BaseGenerator::~BaseGenerator() {
-    BaseGenerator::allGenerators.erase(BaseGenerator::allGenerators.begin() + index);
+    BaseGenerator::allGenerators[this->index] = nullptr; // TODO: придумать что-то получше
 }
