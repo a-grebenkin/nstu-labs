@@ -51,23 +51,24 @@ double BaseGenerator::average() const {
     for (size_t i = 0; i < N; i++)
         sum += sequence[i];
 
-    return (double)sum / N;
+    return sum / N;
 }
 
-double BaseGenerator::expectedValue() {
+double BaseGenerator::expectedValue(int N) {
+    if (BaseGenerator::allGenerators.size() < N)
+        throw out_of_range("not enough generators");
+
     double sum = 0;
 
-    for (BaseGenerator* generator : BaseGenerator::allGenerators)
-    {
-        if (generator == nullptr) // проверка на существование (см. деструктор)
-            continue;
-
-        sum += generator->average();
-    }
+    for (auto it = BaseGenerator::allGenerators.end() - N; it != BaseGenerator::allGenerators.end(); it++)
+        sum += (*it)->generate();
 
     return sum / BaseGenerator::allGenerators.size();
 }
 
 BaseGenerator::~BaseGenerator() {
-    BaseGenerator::allGenerators[this->index] = nullptr; // TODO: придумать что-то получше
+    for (auto it = BaseGenerator::allGenerators.begin() +  this->index + 1; it != BaseGenerator::allGenerators.end(); it++)
+        (*it)->index -= 1;
+
+    BaseGenerator::allGenerators.erase(BaseGenerator::allGenerators.begin() + this->index);
 }

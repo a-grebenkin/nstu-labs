@@ -21,15 +21,15 @@ public:
 
     double average() const;
 
-    static double expectedValue();
+    static double expectedValue(int N);
 
 
 protected:
     void push(int number);
 
+private:
     vector<int> sequence;
 
-private:
     string name;
 
     size_t counter = 0;
@@ -41,5 +41,4 @@ private:
     inline static vector<BaseGenerator*> allGenerators;
 
     size_t index;
-
 };

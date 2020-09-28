@@ -86,6 +86,6 @@ int main() {
         cout << "Недостаточно чисел" << endl;
     }
 
-    cout << "Мат. ожидание - " << RandomGenerator::expectedValue() << endl;
+    cout << "Мат. ожидание - " << RandomGenerator::expectedValue(2) << endl;
 }
 
