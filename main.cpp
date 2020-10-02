@@ -6,10 +6,11 @@
 
 using namespace std;
 
-int main() {
+int main()
+{
     setlocale(LC_ALL, "Russian");
 
-    int N, k,a,b;
+    int N, k, a, b;
     string name;
     cout << "RandomGenerator" << endl;
     cout << "Введите N: ";
@@ -22,9 +23,9 @@ int main() {
 
     try
     {
-        gen1 = new RandomGenerator(name, N);
+        gen1 = new RandomGenerator("rand gen", 5);
     }
-    catch (const std::exception&)
+    catch (const std::exception &)
     {
         cout << "Произошла ошибка" << endl;
         return 1;
@@ -39,12 +40,15 @@ int main() {
 
     try
     {
-        cout << endl << "Сред. арифмет. - " << gen1->average() << endl;
+        cout << endl
+             << "Сред. арифмет. - " << gen1->average() << endl;
     }
-    catch (const std::exception&)
+    catch (const std::exception &)
     {
         cout << "Недостаточно чисел" << endl;
     }
+
+    cout << gen1->average() << endl;
 
     cout << "GeneratorWithStep" << endl;
     cout << "Введите N: ";
@@ -64,7 +68,7 @@ int main() {
     {
         gen2 = new GeneratorWithStep(name, a, b, N);
     }
-    catch (const std::exception&)
+    catch (const std::exception &)
     {
         cout << "Произошла ошибка" << endl;
         return 1;
@@ -79,13 +83,13 @@ int main() {
 
     try
     {
-        cout << endl << "Сред. арифмет. - " << gen2->average() << endl;
+        cout << endl
+             << "Сред. арифмет. - " << gen2->average() << endl;
     }
-    catch (const std::exception&)
+    catch (const std::exception &)
     {
         cout << "Недостаточно чисел" << endl;
     }
 
-    cout << "Мат. ожидание - " << RandomGenerator::expectedValue(2) << endl;
+    //cout << "Мат. ожидание - " << RandomGenerator::expectedValue(2) << endl;
 }
-

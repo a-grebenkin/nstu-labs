@@ -1,12 +1,16 @@
 #pragma once
 #include "BaseGenerator.h"
 
-class RandomGenerator : public BaseGenerator {
+class RandomGenerator : public BaseGenerator
+{
 public:
     RandomGenerator(const string &name, int N);
 
-    int generate() override;
+    //RandomGenerator(ifstream& stream);
 
-    void setPrevious(int number) override;
+    double generate() override;
+
+    void setPrevious(double number) override;
+
+    //void save(ostream &stream) override;
 };
-

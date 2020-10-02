@@ -1,17 +1,31 @@
 #include "RandomGenerator.h"
+#include <iostream>
 
-RandomGenerator::RandomGenerator(const string &name, int N) : BaseGenerator(name, N) {
-
+RandomGenerator::RandomGenerator(const string &name, int N) : BaseGenerator(name, N)
+{
 }
 
-int RandomGenerator::generate() {
-    int res = rand();
-    this->push(res);
+double RandomGenerator::generate()
+{
+	double res = 0.0;
 
-    return res;
+	try
+	{
+		res = rand() / (rand() + 1.0) + BaseGenerator::generate();
+	}
+	catch (const out_of_range &ex)
+	{
+		res = rand() / (rand() + 1.0);
+	}
+
+	res /= this->generators.size() + 1;
+
+	this->push(res);
+	return res;
 }
 
-void RandomGenerator::setPrevious(int number) {
-    BaseGenerator::setPrevious(number);
-    srand(number);
+void RandomGenerator::setPrevious(double number)
+{
+	BaseGenerator::setPrevious(number);
+	srand(number);
 }

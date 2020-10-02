@@ -1,13 +1,27 @@
 #include "GeneratorWithStep.h"
+#include <iostream>
 
-int GeneratorWithStep::generate() {
-    int res = this->getPrevious() + this->step;
+double GeneratorWithStep::generate()
+{
+	double res = 0.0;
 
-    BaseGenerator::push(res);
-    return res;
+	try
+	{
+		res = this->getPrevious() + this->step + BaseGenerator::generate();
+	}
+	catch (const out_of_range &ex)
+	{
+		res = this->getPrevious() + this->step;
+	}
+
+	res /= this->generators.size() + 1.0;
+
+	BaseGenerator::push(res);
+	return res;
 }
 
-GeneratorWithStep::GeneratorWithStep(const string &name, int N, int first, int step) : BaseGenerator(name, N) {
-    this->step = step;
-    this->push(first);
+GeneratorWithStep::GeneratorWithStep(const string &name, int N, double first, double step) : BaseGenerator(name, N)
+{
+	this->step = step;
+	this->push(first);
 }

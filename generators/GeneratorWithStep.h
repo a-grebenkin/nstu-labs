@@ -1,12 +1,17 @@
 #pragma once
 #include "BaseGenerator.h"
 
-class GeneratorWithStep : public BaseGenerator {
+class GeneratorWithStep : public BaseGenerator
+{
 public:
-    GeneratorWithStep(const string &name, int N, int first, int step);
+    GeneratorWithStep(const string &name, int N, double first, double step);
 
-    int generate() override;
+    //GeneratorWithStep(istream& stream);
+
+    double generate() override;
+
+    //void save(ostream &stream) override;
 
 private:
-    int step;
+    double step;
 };

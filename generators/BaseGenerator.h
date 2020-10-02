@@ -2,33 +2,38 @@
 
 #include <string>
 #include <vector>
+#include <fstream>
 
 using namespace std;
 
-class BaseGenerator {
+class BaseGenerator
+{
 public:
     BaseGenerator(const string &name, int N);
 
-    ~BaseGenerator();
+    //BaseGenerator(istream& stream);
 
-    virtual int generate() = 0;
+    virtual double generate();
 
-    int getPrevious() const;
+    double getPrevious() const;
 
-    virtual void setPrevious(int number);
+    virtual void setPrevious(double number);
 
     string getName() const;
 
+    void add(BaseGenerator *);
+
+    //virtual void save(ostream& stream);
+
     double average() const;
 
-    static double expectedValue(int N);
-
-
 protected:
-    void push(int number);
+    void push(double number);
+
+    vector<BaseGenerator *> generators;
 
 private:
-    vector<int> sequence;
+    vector<double> sequence;
 
     string name;
 
@@ -37,8 +42,4 @@ private:
     size_t N;
 
     bool full = false;
-
-    inline static vector<BaseGenerator*> allGenerators;
-
-    size_t index;
 };
