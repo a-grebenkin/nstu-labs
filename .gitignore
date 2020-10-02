@@ -1,5 +1,6 @@
 .vscode
 .idea
+.vs
 
 # linux
 *.out
@@ -15,3 +16,4 @@
 
 # CMake
 **/cmake-build-debug
+build/**/*
