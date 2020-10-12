@@ -1,6 +1,7 @@
 #include "BaseGenerator.h"
 #include <stdexcept>
 #include <sstream>
+#include <map>
 
 BaseGenerator::BaseGenerator(const string &name, int N)
 {
@@ -128,27 +129,45 @@ double BaseGenerator::average() const
     return sum / N;
 }
 
-/*
-void BaseGenerator::save(ostream& stream)
-{
-    if (!stream.good())
-        throw invalid_argument("invalid stream");
+void BaseGenerator::_save(ostream &stream, const string &additional_data) {
+    stream << R"({"name":")" << this->name << '"' ;
+    stream << R"(,"size":)" << this->N;
+    stream << R"(,"type":)" << this->genType;
+    stream << R"(,"sequence":[)";
 
-    stream << this->name << ';';
-    stream << this->N << ';';
-
-    if (full)
+    if (this->full)
     {
         for (int i = 0; i < this->N; i++)
-            stream << this->sequence[(i+this->counter)% this->N] << ',';
+        {
+            stream << this->sequence[(i + this->counter) % this->N];
+            if (i != this->N - 1)
+                stream << ',';
+        }
     }
     else
     {
         for (size_t i = 0; i < this->counter; i++)
-            stream << this->sequence[i] << ',';
-        stream << "end";
+        {
+            stream << this->sequence[i];
+            if (i != this->counter - 1)
+                stream << ',';
+        }
     }
 
-    stream << ';';
+    stream << R"(],"generators":[)";
+    for (int i = 0; i < this->generators.size(); ++i) {
+        this->generators[i]->save(stream);
+        if (i != this->generators.size() - 1)
+            stream << ",";
+    }
+    stream << ']';
+
+    if (!additional_data.empty())
+        stream << ',' << additional_data;
+
+    stream << '}';
 }
-*/
+
+void BaseGenerator::save(ostream &stream) {
+    this->_save(stream);
+}

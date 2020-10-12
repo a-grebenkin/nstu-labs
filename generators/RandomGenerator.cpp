@@ -3,6 +3,7 @@
 
 RandomGenerator::RandomGenerator(const string &name, int N) : BaseGenerator(name, N)
 {
+    this->genType = GEN_TYPES::RAND;
 }
 
 double RandomGenerator::generate()

@@ -23,14 +23,20 @@ public:
 
     void add(BaseGenerator *);
 
-    //virtual void save(ostream& stream);
-
     double average() const;
+
+    virtual void save(ostream &stream);
 
 protected:
     void push(double number);
 
     vector<BaseGenerator *> generators;
+
+    enum GEN_TYPES {BASE, RAND, STEP};
+
+    GEN_TYPES genType = BASE;
+
+    void _save(ostream &stream, const string &additional_data = "");
 
 private:
     vector<double> sequence;
