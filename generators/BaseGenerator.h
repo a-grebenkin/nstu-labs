@@ -2,16 +2,18 @@
 
 #include <string>
 #include <vector>
-#include <fstream>
+#include <iostream>
 
 using namespace std;
+
+enum class GEN_TYPES { BASE, RAND, STEP };
 
 class BaseGenerator
 {
 public:
     BaseGenerator(const string &name, int N);
 
-    //BaseGenerator(istream& stream);
+    static BaseGenerator* load(istream& stream);
 
     virtual double generate();
 
@@ -32,9 +34,7 @@ protected:
 
     vector<BaseGenerator *> generators;
 
-    enum GEN_TYPES {BASE, RAND, STEP};
-
-    GEN_TYPES genType = BASE;
+    GEN_TYPES genType = GEN_TYPES::BASE;
 
     void _save(ostream &stream, const string &additional_data = "");
 

@@ -1,7 +1,12 @@
+#pragma once
+
 #include "BaseGenerator.h"
+#include "RandomGenerator.h"
+#include "GeneratorWithStep.h"
 #include <stdexcept>
 #include <sstream>
 #include <map>
+#include "../json.h"
 
 BaseGenerator::BaseGenerator(const string &name, int N)
 {
@@ -12,58 +17,40 @@ BaseGenerator::BaseGenerator(const string &name, int N)
     this->N = N;
     this->sequence = vector<double>(N);
 }
-/*
-BaseGenerator::BaseGenerator(istream& stream)
+
+BaseGenerator* BaseGenerator::load(istream& stream)
 {
-    if (!stream.good())
-        throw invalid_argument("invalid stream");
+    JSONDecoder decoder(stream);
+    BaseGenerator* gen;
 
-
-    string value;
-    getline(stream, value, ';'); // ���
-
-    this->name = value;
-    getline(stream, value, ';'); // N
-
-    try
+    switch (decoder.genType)
     {
-        this->N = atoi(value.c_str());
+    case GEN_TYPES::BASE:
+        gen = new BaseGenerator(decoder.name, decoder.N);
+        break;
+    case GEN_TYPES::RAND:
+        gen = new RandomGenerator(decoder.name, decoder.N);
+        break; 
+    case GEN_TYPES::STEP:
+        gen = new GeneratorWithStep(decoder.name, decoder.N, 0, stod(decoder.additional_data["step"]));
+        break;
+    default:
+        throw invalid_argument("generator not found");
     }
-    catch (const std::exception&)
+
+    for (double number : decoder.sequence)
+        gen->push(number);
+
+    for (const string& genData : decoder.generators)
     {
-        throw invalid_argument("wrong stream");
+        stringstream sstream;
+        sstream << genData;
+        BaseGenerator* children = BaseGenerator::load(sstream);
+        gen->add(children);
     }
 
-    this->sequence = vector<int>(this->N);
-
-    stringstream lineStream;
-    getline(stream, value, ';');
-    lineStream << value;
-
-    this->full = true;
-    for (size_t i = 0; i < N; i++)
-    {
-        string next;
-        getline(lineStream, next, ',');
-
-        if (next == "end")
-        {
-            this->full = false;
-            break;
-        }
-
-        try
-        {
-            this->sequence[this->counter] = atoi(next.c_str());
-            this->counter++;
-        }
-        catch (const std::exception&)
-        {
-            throw invalid_argument("wrong stream");
-        }
-    }
+    return gen;
 }
-*/
 
 double BaseGenerator::generate()
 {
@@ -132,7 +119,7 @@ double BaseGenerator::average() const
 void BaseGenerator::_save(ostream &stream, const string &additional_data) {
     stream << R"({"name":")" << this->name << '"' ;
     stream << R"(,"size":)" << this->N;
-    stream << R"(,"type":)" << this->genType;
+    stream << R"(,"type":)" << (int)this->genType;
     stream << R"(,"sequence":[)";
 
     if (this->full)

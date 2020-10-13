@@ -10,6 +10,7 @@
 *.pdb
 *.ilk
 *.exe
+out/**/*
 
 # macos
 **/*.out.dSYM

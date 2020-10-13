@@ -3,6 +3,8 @@
 #include <locale>
 #include "generators/RandomGenerator.h"
 #include "generators/GeneratorWithStep.h"
+#include "json.h"
+#include <fstream>
 
 using namespace std;
 
@@ -20,6 +22,8 @@ int main()
     cin >> name;
 
     RandomGenerator *gen1;
+
+    ifstream test("test.json");
 
     try
     {
@@ -74,7 +78,7 @@ int main()
         return 1;
     }
 
-    gen1->add(gen2);
+    gen2->add(gen1);
 
     cout << "Введите кол-во необходимых генерируемых чисел: ";
     cin >> k;
@@ -93,7 +97,6 @@ int main()
         cout << "Недостаточно чисел" << endl;
     }
 
-    gen1->save(cout);
-
-    //cout << "Мат. ожидание - " << RandomGenerator::expectedValue(2) << endl;
+    BaseGenerator* testGen = BaseGenerator::load(test);
+    cout << testGen->getName() << endl;
 }
