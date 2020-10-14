@@ -1,5 +1,6 @@
 #include "GeneratorWithStep.h"
 #include <iostream>
+#include <sstream>
 
 double GeneratorWithStep::generate()
 {
@@ -24,4 +25,12 @@ GeneratorWithStep::GeneratorWithStep(const string &name, int N, double first, do
 {
 	this->step = step;
 	this->push(first);
+	this->genType = GEN_TYPES::STEP;
+}
+
+void GeneratorWithStep::save(ostream &stream) {
+    stringstream strs;
+    strs << R"("step":)" << this->step;
+
+    this->_save(stream, strs.str());
 }

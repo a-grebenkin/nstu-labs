@@ -3,6 +3,8 @@
 #include <locale>
 #include "generators/RandomGenerator.h"
 #include "generators/GeneratorWithStep.h"
+#include "json.h"
+#include <fstream>
 
 using namespace std;
 
@@ -10,7 +12,7 @@ int main()
 {
     setlocale(LC_ALL, "Russian");
 
-    int N, k, a, b;
+    double N, k, a, b;
     string name;
     cout << "RandomGenerator" << endl;
     cout << "Введите N: ";
@@ -21,9 +23,11 @@ int main()
 
     RandomGenerator *gen1;
 
+    ifstream test("test.json");
+
     try
     {
-        gen1 = new RandomGenerator("rand gen", 5);
+        gen1 = new RandomGenerator(name, 5);
     }
     catch (const std::exception &)
     {
@@ -66,13 +70,15 @@ int main()
     GeneratorWithStep *gen2;
     try
     {
-        gen2 = new GeneratorWithStep(name, a, b, N);
+        gen2 = new GeneratorWithStep(name, N, a, b);
     }
     catch (const std::exception &)
     {
         cout << "Произошла ошибка" << endl;
         return 1;
     }
+
+    gen2->add(gen1);
 
     cout << "Введите кол-во необходимых генерируемых чисел: ";
     cin >> k;
@@ -91,5 +97,6 @@ int main()
         cout << "Недостаточно чисел" << endl;
     }
 
-    //cout << "Мат. ожидание - " << RandomGenerator::expectedValue(2) << endl;
+    BaseGenerator* testGen = BaseGenerator::load(test);
+    cout << testGen->getName() << endl;
 }
