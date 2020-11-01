@@ -1,20 +1,40 @@
+*.swp
+*.*~
+project.lock.json
+.DS_Store
+*.pyc
+nupkg/
+
+# Visual Studio Code
 .vscode
+
+# Rider
 .idea
-.vs
 
-# linux
-*.out
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
 
-# windows
-*.obj
-*.pdb
-*.ilk
-*.exe
-out/**/*
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+msbuild.log
+msbuild.err
+msbuild.wrn
 
-# macos
-**/*.out.dSYM
+# Visual Studio
+.vs/
 
-# CMake
-**/cmake-build-debug
-build/**/*
+# Мусор
+last_game.txt
