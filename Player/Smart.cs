@@ -7,7 +7,7 @@ namespace nstu_lab.Player
     {
         public SmartPlayer(string name) : base(name) { }
 
-        public override void DoStep(ref int x, ref int y, ref Game.Game game)
+        public override void DoStep(ref int x, ref int y, Game.Game game)
         {
             int count = 0;
 

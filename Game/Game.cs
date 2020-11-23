@@ -1,23 +1,99 @@
 using System;
 using System.IO;
+using System.Text;
 using nstu_lab.Game.Types;
 
 namespace nstu_lab.Game
 {
-    class Game
+    public class Game
     {
         private Value[,] _board = new Value[3, 3];
 
         public Game()
         {
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    _board[i, j] = Value.SHARP;
-                }
-            }
+            this.Clear();
         }
+
+        public GameResult Result { get
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    //если хоть один игрок заполнил строку крестиками или ноликами
+                    if ((Board[i, 0] == Board[i, 1]) && (Board[i, 0] == Board[i, 2]) && (Board[i, 0] != Value.SHARP))
+                    {
+                        if (Board[i, 0] == Value.CROSS)
+                        {
+                            return GameResult.CROSS;
+                        }
+                        else
+                        {
+                            return GameResult.ZERO;
+                        }
+                    }
+                    //если хоть один игрок заполнил столбец крестиками или ноликами
+
+                    if ((Board[0, i] == Board[1, i]) && (Board[0, i] == Board[2, i]) && (Board[0, i] != Value.SHARP))
+
+                    {
+
+                        if (Board[0, i] == Value.CROSS)
+                        {
+                            return GameResult.CROSS;
+                        }
+                        else
+                        {
+                            return GameResult.ZERO;
+                        }
+                    }
+                }
+
+                //если заполнена главная диагональ
+
+                if ((Board[0, 0] == Board[1, 1]) && (Board[0, 0] == Board[2, 2]) && (Board[0, 0] != Value.SHARP))
+
+                {
+                    if (Board[0, 0] == Value.CROSS)
+                    {
+                        return GameResult.CROSS;
+                    }
+                    else
+                    {
+                        return GameResult.ZERO;
+                    }
+
+                }
+
+                //если заполнена побочная диагональ
+
+                if ((Board[0, 2] == Board[1, 1]) && (Board[0, 2] == Board[2, 0]) && (Board[0, 2] != Value.SHARP))
+
+                {
+
+                    if (Board[0, 2] == Value.CROSS)
+                    {
+                        return GameResult.CROSS;
+                    }
+                    else
+                    {
+                        return GameResult.ZERO;
+                    }
+                }
+
+                //если заполнены все ячейки, но никто не победил
+
+                for (int i = 0; i < 3; i++)
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        if (Board[i, j] == Value.SHARP)
+                        {
+                            return GameResult.PLAYING;
+                        }
+                    }
+                }
+
+                return GameResult.DRAW;
+            } }
 
         public void ShowBoard()
         {
@@ -28,6 +104,17 @@ namespace nstu_lab.Game
                     Console.Write((char)Board[i, j]);
                 }
                 Console.Write('\n');
+            }
+        }
+
+        public void Clear()
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    _board[i, j] = Value.SHARP;
+                }
             }
         }
 
@@ -66,117 +153,39 @@ namespace nstu_lab.Game
         {
             get
             {
-                for (int i = 0; i < 3; i++)
-                {
-                    //если хоть один игрок заполнил строку крестиками или ноликами
-                    if ((Board[i, 0] == Board[i, 1]) && (Board[i, 0] == Board[i, 2]) && (Board[i, 0] != Value.SHARP))
-                    {
-                        if (Board[i, 0] == Value.CROSS)
-                        {
-                            Console.WriteLine("Победили крестики!");
-                        }
-                        else
-                        {
-                            Console.WriteLine("Победили нолики!");
-                        }
-                        return true;
-                    }
-                    //если хоть один игрок заполнил столбец крестиками или ноликами
+                return this.Result != GameResult.PLAYING;
+            }
+        }
 
-                    if ((Board[0, i] == Board[1, i]) && (Board[0, i] == Board[2, i]) && (Board[0, i] != Value.SHARP))
+        public void Load(Stream reader)
+        {
+            byte[] array = new byte[9];
+            reader.Read(array);
+            string field = System.Text.Encoding.Default.GetString(array);
 
-                    {
-
-                        if (Board[0, i] == Value.CROSS)
-                        {
-                            Console.WriteLine("Победили крестики!");
-                        }
-                        else
-                        {
-                            Console.WriteLine("Победили нолики!");
-                        }
-                        return true;
-                    }
-                }
-
-                //если заполнена главная диагональ
-
-                if ((Board[0, 0] == Board[1, 1]) && (Board[0, 0] == Board[2, 2]) && (Board[0, 0] != Value.SHARP))
-
-                {
-                    if (Board[0, 0] == Value.CROSS)
-                    {
-                        Console.WriteLine("Победили крестики!");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Победили нолики!");
-                    }
-                    return true;
-
-                }
-
-                //если заполнена побочная диагональ
-
-                if ((Board[0, 2] == Board[1, 1]) && (Board[0, 2] == Board[2, 0]) && (Board[0, 2] != Value.SHARP))
-
-                {
-
-                    if (Board[0, 2] == Value.CROSS)
-                    {
-                        Console.WriteLine("Победили крестики!");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Победили нолики!");
-                    }
-                    return true;
-                }
-
-                //если заполнены все ячейки, но никто не победил
-
+            try
+            {
                 for (int i = 0; i < 3; i++)
                 {
                     for (int j = 0; j < 3; j++)
                     {
-                        if (Board[i, j] == Value.SHARP)
-                        {
-                            return false;
-                        }
+                        _board[i, j] = (Value)field[(i * 3) + j];
                     }
                 }
-                Console.WriteLine("Ничья!");
-
-                return true;
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException("invalid stream");
             }
         }
 
-        public void Load(StreamReader reader)
+        public void Save(Stream writer)
         {
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    int letter = reader.Read();
-
-                    if (letter == -1)
-                    {
-                        throw new ArgumentOutOfRangeException("invalid stream to read");
-                    }
-
-                    _board[i, j] = (Value)letter;
-                }
-
-            }
-        }
-
-        public void Save(StreamWriter writer)
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    writer.Write((char)Board[i, j]);
+                    writer.Write(Encoding.Default.GetBytes(((char)Board[i, j]).ToString()));
                 }
 
             }

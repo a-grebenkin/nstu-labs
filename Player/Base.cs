@@ -2,7 +2,7 @@ using nstu_lab.Game;
 
 namespace nstu_lab.Player
 {
-    abstract class BasePlayer
+    public abstract class BasePlayer
     {
         private string _name;
 
@@ -13,6 +13,6 @@ namespace nstu_lab.Player
 
         public string Name => _name;
 
-        public abstract void DoStep(ref int x, ref int y, ref Game.Game game);
+        public abstract void DoStep(ref int x, ref int y, Game.Game game);
     }
 }

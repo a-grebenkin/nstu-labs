@@ -12,4 +12,12 @@ namespace nstu_lab.Game.Types
         ZERO = 'o',
         SHARP = '#'
     }
+
+    public enum GameResult
+    {
+        PLAYING,
+        CROSS,
+        ZERO,
+        DRAW
+    }
 }
